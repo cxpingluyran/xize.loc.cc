@@ -1,0 +1,22 @@
+name: Domain Keep Alive
+
+on:
+  schedule:
+    # 每天北京时间上午 8 点和晚上 8 点自动触发（UTC 时间 0:00 和 12:00）
+    - cron: '0 0,12 * * *'
+  workflow_dispatch: # 允许手动点击按钮触发测试
+
+jobs:
+  ping_domain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Access Domain to Generate Traffic
+        run: |
+          echo "Starting to ping domain..."
+          # 使用 curl 访问网站，强制刷新 DNS 并产生流量
+          curl -sI https://xize.loc.cc
+          
+          echo "Doing a quick DNS lookup..."
+          nslookup xize.loc.cc
+          
+          echo "Domain status checked successfully."
